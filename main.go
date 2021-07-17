@@ -33,5 +33,7 @@ func main() {
 		fmt.Println("SouthAmerica: ", bom.SouthAmericaD.City.Name, bom.SouthAmericaD.Distance)
 	}
 
+	graph.FindSingleSourceShortestPath(bom)
+
 	time.Sleep(5 * time.Second)
 }
