@@ -2,4 +2,4 @@ module github.com/bensooraj/trotter
 
 go 1.16
 
-require github.com/RyanCarrier/dijkstra v1.1.0
+require gonum.org/v1/gonum v0.9.3

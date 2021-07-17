@@ -2,52 +2,65 @@ package graph
 
 import (
 	"fmt"
+	"math"
 
-	"github.com/RyanCarrier/dijkstra"
 	"github.com/bensooraj/trotter/util"
 )
 
 func FindSingleSourceShortestPath(originCity *City) {
 
-	// https://pkg.go.dev/gonum.org/v1/gonum/graph/path#DijkstraFrom
-
-	d := dijkstra.NewGraph()
-
 	cityStops := []*City{originCity}
-	d.AddVertex(0)
 
-	for i, city := range []*City{
+	for _, city := range []*City{
 		originCity.AfricaD.City, originCity.AsiaD.City,
 		originCity.EuropeD.City, originCity.NorthAmericaD.City,
 		originCity.OceaniaD.City, originCity.SouthAmericaD.City,
 	} {
 		if city.ContID != originCity.ContID {
 			cityStops = append(cityStops, city)
-			// Add the cities as vertices
-			d.AddVertex(i + 1)
 		}
 	}
 
-	// Create edges and calculate the weights between them
-	for i, sourceCity := range cityStops {
-		for j, destinationCity := range cityStops {
-			if sourceCity.ID != destinationCity.ID {
-				d.AddArc(i, j, int64(util.GetDistanceFromLatLonInKm(
-					sourceCity.Lat, sourceCity.Lon,
-					destinationCity.Lat, destinationCity.Lon,
-				)))
+	permutations := util.GetPermutations(6, 6)
+	fmt.Println("permutations: ", len(permutations))
+
+	// Since I am going the brute force way, I might as well save on a few
+	// distance calculations
+	distCache := make(map[string]float64, 0)
+
+	leastDistance := math.MaxFloat64
+	bestPath := []int{}
+
+	for i := 0; i < len(permutations); i++ {
+		p := permutations[i]
+		var totalDistance float64 = 0
+
+		for j := 0; j < 6; j++ {
+			s, d := cityStops[p[j]], cityStops[p[(j+1)%5]]
+
+			var distance float64
+			comboID := fmt.Sprintf("%s-%s", s.ID, d.ID)
+
+			if v, found := distCache[comboID]; found {
+				distance = v
+			} else {
+				distance = util.GetDistanceFromLatLonInKm(s.Lat, s.Lon, d.Lat, d.Lon)
+				distCache[comboID] = distance
 			}
+
+			totalDistance += distance
+		}
+
+		if totalDistance < leastDistance {
+			leastDistance = totalDistance
+			bestPath = p
 		}
 	}
 
-	d.ExportToFile("d.txt")
-
-	// Find the shortest path starting from the origin back to the origin
-	best, err := d.Shortest(0, 5)
-	if err != nil {
-		fmt.Println("ERROR: ", err)
-		return
+	fmt.Println("bestPath: ", bestPath, leastDistance, "that is, ")
+	for _, seq := range bestPath {
+		fmt.Printf("[%s] => ", cityStops[seq].Name)
 	}
-
-	fmt.Println(best.Path, best.Distance)
+	fmt.Println()
+	fmt.Println()
 }
