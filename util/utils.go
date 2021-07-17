@@ -29,7 +29,7 @@ func GetRuntimeMemStats() runtime.MemStats {
 func LogRuntimeMemStats() {
 	m := GetRuntimeMemStats()
 
-	logLine := ""
+	logLine := "\n"
 	logLine += fmt.Sprintf("Alloc = %v MiB", ByteCountSI(m.Alloc))
 	logLine += fmt.Sprintf("\tTotalAlloc = %v MiB", ByteCountSI(m.TotalAlloc))
 	logLine += fmt.Sprintf("\tSys = %v MiB", ByteCountSI(m.Sys))

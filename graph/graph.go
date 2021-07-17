@@ -7,7 +7,7 @@ import (
 	"github.com/bensooraj/trotter/util"
 )
 
-func FindSingleSourceShortestPath(originCity *City) {
+func FindSingleSourceShortestPath(originCity *City) string {
 
 	cityStops := []*City{originCity}
 
@@ -22,7 +22,6 @@ func FindSingleSourceShortestPath(originCity *City) {
 	}
 
 	permutations := util.GetPermutations(6, 6)
-	fmt.Println("permutations: ", len(permutations))
 
 	// Since I am going the brute force way, I might as well save on a few
 	// distance calculations
@@ -57,10 +56,11 @@ func FindSingleSourceShortestPath(originCity *City) {
 		}
 	}
 
-	fmt.Println("bestPath: ", bestPath, leastDistance, "that is, ")
+	outputMessage := ""
 	for _, seq := range bestPath {
-		fmt.Printf("[%s] => ", cityStops[seq].Name)
+		outputMessage += fmt.Sprintf("%s (%s, %s) → ", cityStops[seq].ID, cityStops[seq].Name, cityStops[seq].ContID)
 	}
-	fmt.Println()
-	fmt.Println()
+	outputMessage += fmt.Sprintf("\nDistance travelled: %f KM(s)\n", leastDistance)
+
+	return outputMessage
 }
