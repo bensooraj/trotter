@@ -5,14 +5,13 @@ import (
 
 	"github.com/bensooraj/trotter/graph"
 	"github.com/bensooraj/trotter/repl"
-	"github.com/bensooraj/trotter/util"
 )
 
 func main() {
 	cityMap := graph.LoadContinentToCitiesMap()
 	cityMap.PopulateDistanceDataLinear()
 
-	util.LogRuntimeMemStats()
+	// util.LogRuntimeMemStats()
 
 	repl.Run(cityMap)
 
