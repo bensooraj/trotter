@@ -60,7 +60,7 @@ func FindSingleSourceShortestPath(originCity *City) string {
 	for _, seq := range bestPath {
 		outputMessage += fmt.Sprintf("%s (%s, %s) → ", cityStops[seq].ID, cityStops[seq].Name, cityStops[seq].ContID)
 	}
-	outputMessage += fmt.Sprintf("\nDistance travelled: %f\n", leastDistance)
+	outputMessage += fmt.Sprintf("\nDistance travelled: %f KM(s)\n", leastDistance)
 
 	return outputMessage
 }
