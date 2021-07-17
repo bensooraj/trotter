@@ -40,7 +40,7 @@ type CityMap map[string]*City
 func (cityMap *CityMap) PopulateDistanceDataLinear() {
 	for _, sourceCity := range *cityMap {
 		for _, destinationCity := range *cityMap {
-			if sourceCity.ContID != destinationCity.ContID {
+			if sourceCity.ID != destinationCity.ID {
 
 				distance := util.GetDistanceFromLatLonInKm(
 					sourceCity.Lat, sourceCity.Lon,
