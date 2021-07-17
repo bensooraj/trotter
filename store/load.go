@@ -9,7 +9,7 @@ import (
 )
 
 func GetCityListFromJSON() (*Cities, error) {
-	jsonFile, err := os.Open("store/dump/cities.json")
+	jsonFile, err := os.Open("store/data/cities.json")
 	if err != nil {
 		fmt.Println(err)
 		return nil, errors.New("ErrorReadingJSONFile")

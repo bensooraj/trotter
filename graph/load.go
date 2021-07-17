@@ -1,6 +1,8 @@
 package graph
 
-import "github.com/bensooraj/trotter/store"
+import (
+	"github.com/bensooraj/trotter/store"
+)
 
 func LoadContinentToCitiesMap() *CityMap {
 	var cityMap CityMap = make(CityMap, 6)
@@ -20,12 +22,12 @@ func LoadContinentToCitiesMap() *CityMap {
 			Lat: city.Location.Lat,
 			Lon: city.Location.Lon,
 
-			AfricaD:       make(map[*City]float64),
-			AsiaD:         make(map[*City]float64),
-			EuropeD:       make(map[*City]float64),
-			NorthAmericaD: make(map[*City]float64),
-			OceaniaD:      make(map[*City]float64),
-			SouthAmericaD: make(map[*City]float64),
+			AfricaD:       nil,
+			AsiaD:         nil,
+			EuropeD:       nil,
+			NorthAmericaD: nil,
+			OceaniaD:      nil,
+			SouthAmericaD: nil,
 		}
 
 	}

@@ -13,6 +13,11 @@ const (
 	SouthAmerica = "south-america"
 )
 
+type Nearest struct {
+	City     *City
+	Distance float64
+}
+
 type City struct {
 	ID     string
 	Name   string
@@ -22,12 +27,12 @@ type City struct {
 	Lon float64
 
 	// Distance maps for each continent
-	AfricaD       map[*City]float64
-	AsiaD         map[*City]float64
-	EuropeD       map[*City]float64
-	NorthAmericaD map[*City]float64
-	OceaniaD      map[*City]float64
-	SouthAmericaD map[*City]float64
+	AfricaD       *Nearest
+	AsiaD         *Nearest
+	EuropeD       *Nearest
+	NorthAmericaD *Nearest
+	OceaniaD      *Nearest
+	SouthAmericaD *Nearest
 }
 
 type CityMap map[string]*City
@@ -36,37 +41,55 @@ func (cityMap *CityMap) PopulateDistanceDataLinear() {
 	for _, sourceCity := range *cityMap {
 		for _, destinationCity := range *cityMap {
 			if sourceCity.ContID != destinationCity.ContID {
+
+				distance := util.GetDistanceFromLatLonInKm(
+					sourceCity.Lat, sourceCity.Lon,
+					destinationCity.Lat, destinationCity.Lon,
+				)
+
 				switch destinationCity.ContID {
 				case Africa:
-					sourceCity.AfricaD[destinationCity] = util.GetDistanceFromLatLonInKm(
-						sourceCity.Lat, sourceCity.Lon,
-						destinationCity.Lat, destinationCity.Lon,
-					)
+					if sourceCity.AfricaD == nil {
+						sourceCity.AfricaD = &Nearest{destinationCity, distance}
+					} else if distance < sourceCity.AfricaD.Distance {
+						sourceCity.AfricaD.City = destinationCity
+						sourceCity.AfricaD.Distance = distance
+					}
 				case Asia:
-					sourceCity.AsiaD[destinationCity] = util.GetDistanceFromLatLonInKm(
-						sourceCity.Lat, sourceCity.Lon,
-						destinationCity.Lat, destinationCity.Lon,
-					)
+					if sourceCity.AsiaD == nil {
+						sourceCity.AsiaD = &Nearest{destinationCity, distance}
+					} else if distance < sourceCity.AsiaD.Distance {
+						sourceCity.AsiaD.City = destinationCity
+						sourceCity.AsiaD.Distance = distance
+					}
 				case Europe:
-					sourceCity.EuropeD[destinationCity] = util.GetDistanceFromLatLonInKm(
-						sourceCity.Lat, sourceCity.Lon,
-						destinationCity.Lat, destinationCity.Lon,
-					)
+					if sourceCity.EuropeD == nil {
+						sourceCity.EuropeD = &Nearest{destinationCity, distance}
+					} else if distance < sourceCity.EuropeD.Distance {
+						sourceCity.EuropeD.City = destinationCity
+						sourceCity.EuropeD.Distance = distance
+					}
 				case NorthAmerica:
-					sourceCity.NorthAmericaD[destinationCity] = util.GetDistanceFromLatLonInKm(
-						sourceCity.Lat, sourceCity.Lon,
-						destinationCity.Lat, destinationCity.Lon,
-					)
+					if sourceCity.NorthAmericaD == nil {
+						sourceCity.NorthAmericaD = &Nearest{destinationCity, distance}
+					} else if distance < sourceCity.NorthAmericaD.Distance {
+						sourceCity.NorthAmericaD.City = destinationCity
+						sourceCity.NorthAmericaD.Distance = distance
+					}
 				case Oceania:
-					sourceCity.OceaniaD[destinationCity] = util.GetDistanceFromLatLonInKm(
-						sourceCity.Lat, sourceCity.Lon,
-						destinationCity.Lat, destinationCity.Lon,
-					)
+					if sourceCity.OceaniaD == nil {
+						sourceCity.OceaniaD = &Nearest{destinationCity, distance}
+					} else if distance < sourceCity.OceaniaD.Distance {
+						sourceCity.OceaniaD.City = destinationCity
+						sourceCity.OceaniaD.Distance = distance
+					}
 				case SouthAmerica:
-					sourceCity.SouthAmericaD[destinationCity] = util.GetDistanceFromLatLonInKm(
-						sourceCity.Lat, sourceCity.Lon,
-						destinationCity.Lat, destinationCity.Lon,
-					)
+					if sourceCity.SouthAmericaD == nil {
+						sourceCity.SouthAmericaD = &Nearest{destinationCity, distance}
+					} else if distance < sourceCity.SouthAmericaD.Distance {
+						sourceCity.SouthAmericaD.City = destinationCity
+						sourceCity.SouthAmericaD.Distance = distance
+					}
 				}
 			}
 		}
